@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/GrassBlock.png</file>
+        <file>image/GroundBlock.png</file>
+        <file>image/home.png</file>
+        <file>image/StoneBrick.png</file>
+    </qresource>
+</RCC>
