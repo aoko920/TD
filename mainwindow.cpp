@@ -10,9 +10,25 @@ MainWindow::MainWindow(int level)
 
 }
 
+void MainWindow::SetLabel()
+{
+    //绘制金钱
+    QLabel *Money = new QLabel(this);
+    Money->move(20,20);
+    Money->resize(160,40);
+    Money->setFont(QFont("Times",12,QFont::Black));
+    Money->setText(QString("Money：%1").arg(money));
+    //绘制生命值
+    QLabel *Life = new QLabel(this);
+    Life->move(20,60);
+    Life->resize(160,40);
+    Life->setFont(QFont("Times",12,QFont::Black));
+    Life->setText(QString("Life：%1").arg(life));
+}
+
+//绘制地图
 void MainWindow::DrawMap(QPainter& painter)
 {
-    //绘制地图
     //level 1
     int Map_1[16][26] =
     {
@@ -86,6 +102,7 @@ void MainWindow::DrawMap(QPainter& painter)
         }
     painter.drawPixmap(x,y, 80, 80, QPixmap(":/image/home.png"));
 }
+
 void MainWindow::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);

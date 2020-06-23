@@ -25,6 +25,7 @@ GameStart::GameStart(QWidget *parent) :
     connect(b1,&QPushButton::clicked,[=]()
     {
         MainWindow *mainwindow = new MainWindow(1);
+        mainwindow->SetLabel();
         mainwindow->show();
     });
     connect(b2,&QPushButton::clicked,[=]()
