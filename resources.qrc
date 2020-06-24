@@ -4,5 +4,8 @@
         <file>image/GroundBlock.png</file>
         <file>image/home.png</file>
         <file>image/StoneBrick.png</file>
+        <file>image/Dragon.png</file>
+        <file>image/Shark.png</file>
+        <file>image/monster1.png</file>
     </qresource>
 </RCC>

@@ -27,11 +27,15 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    gamestart.cpp
+    gamestart.cpp \
+    towerbase.cpp \
+    enemy.cpp
 
 HEADERS += \
         mainwindow.h \
-    gamestart.h
+    gamestart.h \
+    towerbase.h \
+    enemy.h
 
 FORMS += \
     gamestart.ui
