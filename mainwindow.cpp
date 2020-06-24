@@ -62,6 +62,7 @@ MainWindow::MainWindow(int level)
 
                 break;
             };
+        update();
     });
 }
 

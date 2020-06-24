@@ -50,7 +50,7 @@ bool Enemy::Move()
     //每到达一个拐点就删除它
     if(EnemyWay.at(0)->x() == EnemyX && EnemyWay.at(0)->y() == EnemyY)
     {
-        delete EnemyWay.begin();
+
         EnemyWay.erase(EnemyWay.begin());
     }
     //等所有路径点都被删除 则说明已到达家位置 返回抵达信号
