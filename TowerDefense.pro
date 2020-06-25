@@ -29,13 +29,17 @@ SOURCES += \
         mainwindow.cpp \
     gamestart.cpp \
     towerbase.cpp \
-    enemy.cpp
+    enemy.cpp \
+    towerposition.cpp \
+    firetower.cpp
 
 HEADERS += \
         mainwindow.h \
     gamestart.h \
     towerbase.h \
-    enemy.h
+    enemy.h \
+    towerposition.h \
+    firetower.h
 
 FORMS += \
     gamestart.ui

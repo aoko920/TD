@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QDebug>
+#include "firetower.h"
 //插入怪物  路径点数组名、怪物初始坐标、怪物编号
 
 MainWindow::MainWindow(int level)
@@ -9,6 +10,23 @@ MainWindow::MainWindow(int level)
     //设置窗口信息
     setFixedSize(1040, 640);
     setWindowTitle("Game Start");
+
+
+    //标签
+    //绘制金钱
+    QLabel *Money = new QLabel(this);
+    Money->move(860,20);
+    Money->resize(160,40);
+    Money->setFont(QFont("Times",12,QFont::Black));
+    Money->setText(QString("Money：%1").arg(money));
+    //绘制生命值
+    QLabel *Life = new QLabel(this);
+    Life->move(860,60);
+    Life->resize(160,40);
+    Life->setFont(QFont("Times",12,QFont::Black));
+    Life->setText(QString("Life：%1").arg(life));
+
+
     //插入敌人的定时器
     QTimer* timer = new QTimer(this);
     timer->start(2000);//设置每2秒更新一次
@@ -20,7 +38,7 @@ MainWindow::MainWindow(int level)
             case 1:
             {
                 //路径拐点数组
-                QPoint* Waypoints1[6] = {new QPoint(280 , 200), new QPoint(280 , 320), new QPoint(520 , 320), new QPoint(520 , 160), new QPoint(720 , 160), new QPoint(homepoint->x(),homepoint->y())};
+                QPoint* Waypoints1[6] = {new QPoint(240 , 200), new QPoint(240 , 320), new QPoint(520 , 320), new QPoint(520 , 160), new QPoint(720 , 160), new QPoint(homepoint->x(),homepoint->y())};
                 //起始点数组
                 QPoint* startpoints = new QPoint(-40, 200);
                 //拐点个数数组
@@ -50,16 +68,13 @@ MainWindow::MainWindow(int level)
     connect(timer2,&QTimer::timeout,[=]()
     {
         for (auto Moni = EnemyVec.begin(); Moni != EnemyVec.end(); Moni++)
-            if((*Moni)->Move()) //怪物走到终点
-            {
+            if((*Moni)->Move()) //到达家的时候该函数return true
+            {//到家后删除敌人 生命值减1 刷新标签 生命值为0时关闭窗口
                 delete *Moni;
-                EnemyVec.erase(Moni);         //怪物走到终点则删除这个怪物
-
-                life--;                         //我们的生命数量-1
-
-
-                if (life <= 0) this->close();   //生命值为0时关闭该窗口
-
+                EnemyVec.erase(Moni);
+                life--;
+                Life->setText(QString("Life：%1").arg(life));
+                if (life <= 0) this->close();
                 break;
             };
         update();
@@ -80,22 +95,6 @@ void MainWindow::DrawEnemy(QPainter& painter)
 }
 
 
-//标签
-void MainWindow::SetLabel()
-{
-    //绘制金钱
-    QLabel *Money = new QLabel(this);
-    Money->move(20,20);
-    Money->resize(160,40);
-    Money->setFont(QFont("Times",12,QFont::Black));
-    Money->setText(QString("Money：%1").arg(money));
-    //绘制生命值
-    QLabel *Life = new QLabel(this);
-    Life->move(20,60);
-    Life->resize(160,40);
-    Life->setFont(QFont("Times",12,QFont::Black));
-    Life->setText(QString("Life：%1").arg(life));
-}
 
 //地图
 void MainWindow::DrawMap(QPainter& painter)
