@@ -31,7 +31,9 @@ SOURCES += \
     towerbase.cpp \
     enemy.cpp \
     towerposition.cpp \
-    firetower.cpp
+    firetower.cpp \
+    optionbutton.cpp \
+    woodtower.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +41,9 @@ HEADERS += \
     towerbase.h \
     enemy.h \
     towerposition.h \
-    firetower.h
+    firetower.h \
+    optionbutton.h \
+    woodtower.h
 
 FORMS += \
     gamestart.ui

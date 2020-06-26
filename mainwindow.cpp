@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QDebug>
 #include "firetower.h"
+#include "woodtower.h"
 //插入怪物  路径点数组名、怪物初始坐标、怪物编号
 
 MainWindow::MainWindow(int level)
@@ -81,19 +82,36 @@ MainWindow::MainWindow(int level)
     });
 }
 
+
 void MainWindow::InsertEnemy(QPoint** Waypoints1, int sum, QPoint* startpoints,int typenumber)
 {
     EnemyVec.push_back(new Enemy(Waypoints1,sum,startpoints->x(),startpoints->y(),typenumber));
 }
 
 
-
 void MainWindow::DrawEnemy(QPainter& painter)
 {
-    for (auto moni : EnemyVec)//画出怪物
+    for (auto moni : EnemyVec)
         painter.drawPixmap(moni->GetX(), moni->GetY(), 64, 64, QPixmap(moni->LoadImage()));
 }
 
+
+void MainWindow::DrawOptionButton(QPainter & painter)
+{
+    if(buttons[0]->show&&buttons[1]->show)//确认显示选择键
+    for(int i = 0;i <= 1;i ++)
+    {
+        painter.drawPixmap(buttons[i]->GetX(),buttons[i]->GetY(),56,56,QPixmap(buttons[i]->GetImage()));
+    }
+}
+
+void MainWindow::DrawTower(QPainter & painter)
+{
+    for(auto tower : TowerBaseVec)
+    {
+        painter.drawPixmap(tower->GetX(),tower->GetY(),72,46,QPixmap(tower->GetImage()));
+    }
+}
 
 
 //地图
@@ -161,6 +179,7 @@ void MainWindow::DrawMap(QPainter& painter)
                 break;
             case 3:
                 painter.drawPixmap(i * 40, j * 40, 80, 80, QPixmap(":/image/StoneBrick.png"));
+                TowerPositionVec.push_back(new TowerPosition(i * 40,j * 40));//顺便存入可放塔的坐标数组
                 break;
             case 5:
                 painter.drawPixmap(i * 40, j * 40, 40, 40, QPixmap(":/image/GroundBlock.png"));
@@ -178,6 +197,59 @@ void MainWindow::paintEvent(QPaintEvent *)
     QPainter painter(this);
     DrawMap(painter);
     DrawEnemy(painter);
+    DrawOptionButton(painter);
+    DrawTower(painter);
+
+}
+
+
+void MainWindow::mousePressEvent(QMouseEvent *click)
+{
+    //点击放置塔的位置 显示两个塔选择键
+    if(click->button() == Qt::LeftButton)
+    {
+        for(auto p : TowerPositionVec)
+        {
+            if(click->x() >= p->GetX() && click->x() <= p->GetX()+80 && click->y() >= p->GetY() && click->y() <= p->GetY()+80)//判断点击点落在可放塔的区域内
+            {
+                buttons[0]->show = true;
+                buttons[1]->show = true;
+                buttons[0]->x = p->GetX()-56;
+                buttons[0]->y = p->GetY()-28;
+                buttons[1]->x = p->GetX()-56;
+                buttons[1]->y = p->GetY()+52;
+                update();
+
+            }
+
+
+        }
+
+        //点击选择键 放塔
+        for(int i = 0;i <= 1;i ++)
+        {
+            //隐藏选择键
+            if(click->x() >= buttons[i]->GetX() && click->x() <= buttons[i]->GetX()+56 && click->y() >= buttons[i]->GetY() && click->y() <= buttons[i]->GetY()+56)//判断点击点落在选择键内
+            {
+                if(i == 0)
+                {
+                    buttons[i]->show = false;
+                    TowerBaseVec.push_back(new FireTower(buttons[i]->x+76,buttons[i]->y+48));
+                }
+                else
+                {
+                    buttons[i]->show = false;
+                    TowerBaseVec.push_back(new WoodTower(buttons[i]->x+76,buttons[i]->y-32));
+                }
+                update();
+
+            }
+        }
+    }
+
+
+
+    update();
 }
 
 MainWindow::~MainWindow()

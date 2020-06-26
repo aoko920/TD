@@ -6,7 +6,6 @@
 class TowerBase
 {
 public:
-    TowerBase();
     int GetX();
     int GetY();
     QString GetImage();

@@ -7,6 +7,9 @@
         <file>image/Dragon.png</file>
         <file>image/Shark.png</file>
         <file>image/monster1.png</file>
+        <file>image/BuyFireBottle.png</file>
+        <file>image/BuyGreenBottle.png</file>
+        <file>image/GreenBottle.png</file>
         <file>image/FireBottle.png</file>
     </qresource>
 </RCC>
