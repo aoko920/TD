@@ -256,11 +256,12 @@ void MainWindow::mousePressEvent(QMouseEvent *click)
     //点击右键 删除塔
     if(click->button() == Qt::RightButton)
     {
-        for(auto t : TowerBaseVec)
+        for(auto &t : TowerBaseVec)
         {
             if(click->x() >= t->GetX()-40 && click->x() <= t->GetX()+40 && click->y() >= t->GetY()-40 && click->y() <= t->GetY()+40)
             {
-                t->show = false;
+               // t->show = false;
+                TowerBaseVec.erase(&t);
             }
         }
     }
