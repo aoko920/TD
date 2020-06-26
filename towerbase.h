@@ -9,6 +9,7 @@ public:
     int GetX();
     int GetY();
     QString GetImage();
+    bool show = true;
 protected:
     int TowerX;
     int TowerY;

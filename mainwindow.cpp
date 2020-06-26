@@ -107,7 +107,10 @@ void MainWindow::DrawTower(QPainter & painter)
 {
     for(auto tower : TowerBaseVec)
     {
-        painter.drawPixmap(tower->GetX(),tower->GetY(),72,46,QPixmap(tower->GetImage()));
+        if(tower->show == true)
+        {
+            painter.drawPixmap(tower->GetX(),tower->GetY(),72,46,QPixmap(tower->GetImage()));
+        }
     }
 }
 
@@ -250,17 +253,17 @@ void MainWindow::mousePressEvent(QMouseEvent *click)
             }
         }
     }
-    /*点击右键 删除塔
+    //点击右键 删除塔
     if(click->button() == Qt::RightButton)
     {
         for(auto t : TowerBaseVec)
         {
             if(click->x() >= t->GetX()-40 && click->x() <= t->GetX()+40 && click->y() >= t->GetY()-40 && click->y() <= t->GetY()+40)
             {
-                TowerBaseVec.erase(TowerBaseVec.indexOf(t));
+                t->show = false;
             }
         }
-    }*/
+    }
 
 
     update();
