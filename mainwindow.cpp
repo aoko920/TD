@@ -13,15 +13,13 @@ MainWindow::MainWindow(int level)
     setWindowTitle("Game Start");
 
 
-    //标签
+    //设置标签
     //绘制金钱
-    QLabel *Money = new QLabel(this);
     Money->move(860,20);
     Money->resize(160,40);
     Money->setFont(QFont("Times",12,QFont::Black));
     Money->setText(QString("Money：%1").arg(money));
     //绘制生命值
-    QLabel *Life = new QLabel(this);
     Life->move(860,60);
     Life->resize(160,40);
     Life->setFont(QFont("Times",12,QFont::Black));
@@ -205,7 +203,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 
 void MainWindow::mousePressEvent(QMouseEvent *click)
 {
-    //点击放置塔的位置 显示两个塔选择键
+    //点击左键 放置塔的位置 显示两个塔选择键
     if(click->button() == Qt::LeftButton)
     {
         for(auto p : TowerPositionVec)
@@ -233,24 +231,57 @@ void MainWindow::mousePressEvent(QMouseEvent *click)
             {
                 if(i == 0)
                 {
-                    buttons[i]->show = false;
-                    TowerBaseVec.push_back(new FireTower(buttons[i]->x+76,buttons[i]->y+48));
+                    if(EnoughMoney(160))
+                    {
+                        buttons[i]->show = false;
+                        TowerBaseVec.push_back(new FireTower(buttons[i]->x+76,buttons[i]->y+48));
+                    }
                 }
                 else
                 {
-                    buttons[i]->show = false;
-                    TowerBaseVec.push_back(new WoodTower(buttons[i]->x+76,buttons[i]->y-32));
+                    if(EnoughMoney(100))
+                    {
+                        buttons[i]->show = false;
+                        TowerBaseVec.push_back(new WoodTower(buttons[i]->x+76,buttons[i]->y-32));
+                    }
                 }
                 update();
 
             }
         }
     }
-
+    /*点击右键 删除塔
+    if(click->button() == Qt::RightButton)
+    {
+        for(auto t : TowerBaseVec)
+        {
+            if(click->x() >= t->GetX()-40 && click->x() <= t->GetX()+40 && click->y() >= t->GetY()-40 && click->y() <= t->GetY()+40)
+            {
+                TowerBaseVec.erase(TowerBaseVec.indexOf(t));
+            }
+        }
+    }*/
 
 
     update();
 }
+
+
+//判断钱是否够买塔
+bool MainWindow::EnoughMoney(int cost)
+{
+    if(money >= cost)
+    {
+        money = money - cost;
+        Money->setText(QString("Money：%1").arg(money));
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 
 MainWindow::~MainWindow()
 {

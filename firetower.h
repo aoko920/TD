@@ -2,7 +2,7 @@
 #define FIRETOWER_H
 
 #include "towerbase.h"
-
+//花钱多 威力大
 class FireTower:public TowerBase
 {
 public:

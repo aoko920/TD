@@ -2,7 +2,7 @@
 #define WOODTOWER_H
 
 #include "towerbase.h"
-
+//花钱少 威力小
 class WoodTower:public TowerBase
 {
 public:
