@@ -101,6 +101,7 @@ MainWindow::MainWindow(int level)
                 if(sqrt((tower->GetcpX()-tower->GetTarget()->GetX()-32)*(tower->GetcpX()-tower->GetTarget()->GetX()-32)+(tower->GetcpY()-tower->GetTarget()->GetY()-32)*(tower->GetcpY()-tower->GetTarget()->GetY()-32)) <= tower->GetAttackRange())
                 {//用反三角函数求旋转角
                     tower->SetRotation(atan2(tower->GetTarget()->GetY()-tower->GetcpY(),tower->GetTarget()->GetX()-tower->GetcpX())*180/3.1415);
+                    tower->InterBullet();
                 }
             }
 
@@ -112,6 +113,11 @@ MainWindow::MainWindow(int level)
                     tower->hasaim = false;
                 }
             }
+        }
+
+        for(auto tower : TowerBaseVec)
+        {
+            tower->BulletMove();
         }
 
         update();
@@ -147,6 +153,10 @@ void MainWindow::DrawTower(QPainter & painter)
     {
         if(tower->show == true)
         {
+            for (auto bullet : tower->GetBulletVec())
+            {
+                painter.drawPixmap(bullet->GetX(),bullet->GetY(), 20, 20,QPixmap(bullet->GetImage()));
+            }
             painter.translate(tower->GetcpX(),tower->GetcpY());
             painter.rotate(tower->GetRotation());
             painter.translate(-tower->GetcpX(),-tower->GetcpY());

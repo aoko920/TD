@@ -11,5 +11,6 @@
         <file>image/BuyGreenBottle.png</file>
         <file>image/GreenBottle.png</file>
         <file>image/FireBottle.png</file>
+        <file>image/Shells1.png</file>
     </qresource>
 </RCC>

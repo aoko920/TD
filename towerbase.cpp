@@ -49,3 +49,50 @@ void TowerBase::SetRotation(int _rotation)
 {
     rotation = _rotation;
 }
+
+void TowerBase::InterBullet()
+{
+    startpos++;
+    if(hasaim&&startpos>=5)
+    {
+        if(target->GetX() < cpx)//向左发射子弹
+        {
+            BulletVec.push_back(new Bullet(cpx,cpy,-1));
+        }
+        else//向右发射子弹
+        {
+            BulletVec.push_back(new Bullet(cpx,cpy,1));
+        }
+    }
+}
+
+void TowerBase::BulletMove()
+{
+    for(auto bullet : BulletVec)
+    {
+        if(bullet->GetLD() == -1 && cpx!=target->GetX())
+        {
+            bullet->SetX(bullet->GetX()-20);
+            bullet->SetY((target->GetY()-cpy)/(target->GetX()-cpx)*bullet->GetX()+target->GetY()-(target->GetY()-cpy)/(target->GetX()-cpx)*target->GetX());
+        }
+        if(bullet->GetLD() == 1 && cpx!=target->GetX())
+        {
+            bullet->SetX(bullet->GetX()+20);
+            bullet->SetY((target->GetY()-cpy)/(target->GetX()-cpx)*bullet->GetX()+target->GetY()-(target->GetY()-cpy)/(target->GetX()-cpx)*target->GetX());
+        }
+    }
+    for(auto bullet = BulletVec.begin(); bullet != BulletVec.end(); bullet++)
+    {//如果子弹超过了攻击范围 就删除它
+        if((*bullet)->GetX() > cpx+attackrange || (*bullet)->GetX() < cpx-attackrange || (*bullet)->GetY() > cpy+attackrange || (*bullet)->GetY() < cpy-attackrange)
+        {
+            BulletVec.erase(bullet);
+            break;
+        }
+    }
+}
+
+QVector<Bullet*>& TowerBase::GetBulletVec()
+{
+    return BulletVec;
+}
+
