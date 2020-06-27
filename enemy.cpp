@@ -15,9 +15,13 @@ Enemy::Enemy(QPoint **WayPoints, int pointsum, int startx, int starty, int typen
     {
     case 1:
         Image = ":/image/monster1.png";
+        life = 24;
+        worth = 100;
         break;
     case 2:
         Image = ":/image/Shark.png";
+        life = 36;
+        worth = 150;
         break;
     default:
         break;
@@ -74,4 +78,19 @@ int Enemy::GetY() const
 QString Enemy::LoadImage()
 {
     return Image;
+}
+
+void Enemy::SetLife(int _life)
+{
+    life = _life;
+}
+
+int Enemy::GetLife()
+{
+    return life;
+}
+
+int Enemy::GetWorth()
+{
+    return worth;
 }

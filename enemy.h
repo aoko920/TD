@@ -14,11 +14,16 @@ public:
     int GetX() const;
     int GetY() const;
     QString LoadImage();//载入图片
+    int GetLife();
+    void SetLife(int);
+    int GetWorth();
 private:
     QVector<QPoint*> EnemyWay;//敌人路径数组
     int EnemyX, EnemyY;//敌人坐标
     int type;//敌人种类
     QString Image;//图片
+    int life;
+    int worth;
 
 };
 

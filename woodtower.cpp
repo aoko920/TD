@@ -8,4 +8,5 @@ WoodTower::WoodTower(int x,int y,int _cpx,int _cpy)
     cpy = _cpy;
     Image = QString(":/image/GreenBottle.png");
     attackrange = 200;
+    attackpower = 4;
 }

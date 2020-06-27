@@ -24,16 +24,18 @@ public:
     void InterBullet();
     void BulletMove();
     QVector<Bullet*>& GetBulletVec();
+    int GetAttackPower();
 protected:
     int TowerX;//将图片调整到合适位置的坐标
     int TowerY;
     int cpx;//中心点坐标
     int cpy;
-    int attackrange;
+    int attackrange;//攻击范围
     int rotation = 0;
     QString Image;
     Enemy* target = NULL;//敌人目标
     int startpos = 0;
+    int attackpower;//攻击力
 
 };
 

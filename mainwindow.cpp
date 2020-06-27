@@ -120,6 +120,35 @@ MainWindow::MainWindow(int level)
             tower->BulletMove();
         }
 
+        for(auto tower : TowerBaseVec)
+        {
+            auto &bulletvec = tower->GetBulletVec();
+            for(auto bullet = bulletvec.begin();bullet != bulletvec.end();bullet ++)
+            {
+                for(auto enemy = EnemyVec.begin();enemy != EnemyVec.end();enemy ++)
+                {//子弹落在敌人图片范围内
+                    if((*bullet)->GetX()+10 >= (*enemy)->GetX() && (*bullet)->GetX()+10 <= (*enemy)->GetX()+64 && (*bullet)->GetY()+10 >= (*enemy)->GetY() && (*bullet)->GetY()+10 <= (*enemy)->GetY()+64)
+                    {
+                        bulletvec.erase(bullet);
+                        (*enemy)->SetLife((*enemy)->GetLife()-tower->GetAttackPower());
+                    }
+                    if((*enemy)->GetLife() <= 0)
+                    {
+                        for(auto _tower : TowerBaseVec)
+                        {
+                            if(_tower->GetTarget() == *enemy)
+                            {
+                                _tower->SetTarget(NULL);
+                                money = money + (*enemy)->GetWorth();
+                                Money->setText(QString("Money：%1").arg(money));
+                                EnemyVec.erase(enemy);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         update();
     });
 }

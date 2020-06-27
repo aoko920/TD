@@ -72,12 +72,12 @@ void TowerBase::BulletMove()
     {
         if(bullet->GetLD() == -1 && cpx!=target->GetX())
         {
-            bullet->SetX(bullet->GetX()-20);
+            bullet->SetX(bullet->GetX()-22);
             bullet->SetY((target->GetY()-cpy)/(target->GetX()-cpx)*bullet->GetX()+target->GetY()-(target->GetY()-cpy)/(target->GetX()-cpx)*target->GetX());
         }
         if(bullet->GetLD() == 1 && cpx!=target->GetX())
         {
-            bullet->SetX(bullet->GetX()+20);
+            bullet->SetX(bullet->GetX()+22);
             bullet->SetY((target->GetY()-cpy)/(target->GetX()-cpx)*bullet->GetX()+target->GetY()-(target->GetY()-cpy)/(target->GetX()-cpx)*target->GetX());
         }
     }
@@ -94,5 +94,10 @@ void TowerBase::BulletMove()
 QVector<Bullet*>& TowerBase::GetBulletVec()
 {
     return BulletVec;
+}
+
+int TowerBase::GetAttackPower()
+{
+    return attackpower;
 }
 
