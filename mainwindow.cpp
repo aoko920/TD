@@ -120,6 +120,7 @@ MainWindow::MainWindow(int level)
             tower->BulletMove();
         }
 
+        //子弹打敌人
         for(auto tower : TowerBaseVec)
         {
             auto &bulletvec = tower->GetBulletVec();
@@ -127,22 +128,22 @@ MainWindow::MainWindow(int level)
             {
                 for(auto enemy = EnemyVec.begin();enemy != EnemyVec.end();enemy ++)
                 {//子弹落在敌人图片范围内
-                    if((*bullet)->GetX()+10 >= (*enemy)->GetX() && (*bullet)->GetX()+10 <= (*enemy)->GetX()+64 && (*bullet)->GetY()+10 >= (*enemy)->GetY() && (*bullet)->GetY()+10 <= (*enemy)->GetY()+64)
+                    if((*bullet)->GetX()+20 >= (*enemy)->GetX() && (*bullet)->GetX()+20 <= (*enemy)->GetX()+64 && (*bullet)->GetY()+20 >= (*enemy)->GetY() && (*bullet)->GetY()+20 <= (*enemy)->GetY()+64)
                     {
                         bulletvec.erase(bullet);
                         (*enemy)->SetLife((*enemy)->GetLife()-tower->GetAttackPower());
-                    }
-                    if((*enemy)->GetLife() <= 0)
-                    {
-                        for(auto _tower : TowerBaseVec)
+                        if((*enemy)->GetLife() <= 0)
                         {
-                            if(_tower->GetTarget() == *enemy)
+                            for(auto _tower : TowerBaseVec)
                             {
-                                _tower->SetTarget(NULL);
-                                money = money + (*enemy)->GetWorth();
-                                Money->setText(QString("Money：%1").arg(money));
-                                EnemyVec.erase(enemy);
+                                if(_tower->GetTarget() == *enemy)
+                                {
+                                    _tower->SetTarget(NULL);
+                                }
                             }
+                            money = money + (*enemy)->GetWorth();
+                            Money->setText(QString("Money：%1").arg(money));
+                            EnemyVec.erase(enemy);
                         }
                     }
                 }
@@ -151,7 +152,10 @@ MainWindow::MainWindow(int level)
 
         update();
     });
-}
+
+   }
+
+
 
 
 void MainWindow::InsertEnemy(QPoint** Waypoints1, int sum, QPoint* startpoints,int typenumber)
@@ -184,7 +188,7 @@ void MainWindow::DrawTower(QPainter & painter)
         {
             for (auto bullet : tower->GetBulletVec())
             {
-                painter.drawPixmap(bullet->GetX(),bullet->GetY(), 20, 20,QPixmap(bullet->GetImage()));
+                painter.drawPixmap(bullet->GetX(),bullet->GetY(), 40, 40,QPixmap(bullet->GetImage()));
             }
             painter.translate(tower->GetcpX(),tower->GetcpY());
             painter.rotate(tower->GetRotation());

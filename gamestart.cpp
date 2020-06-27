@@ -16,11 +16,11 @@ GameStart::GameStart(QWidget *parent) :
     b1=new QPushButton(this);
     b1->setText("Level 1");
     b1->setFixedSize(100,60);
-    b1->move(210,320);
+    b1->move(210,400);
     b2=new QPushButton(this);
     b2->setText("Level 2");
     b2->setFixedSize(100,60);
-    b2->move(730,320);
+    b2->move(730,400);
     //转到槽
     connect(b1,&QPushButton::clicked,[=]()
     {

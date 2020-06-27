@@ -52,8 +52,8 @@ void TowerBase::SetRotation(int _rotation)
 
 void TowerBase::InterBullet()
 {
-    startpos++;
-    if(hasaim&&startpos>=5)
+
+    if(hasaim)
     {
         if(target->GetX() < cpx)//向左发射子弹
         {
