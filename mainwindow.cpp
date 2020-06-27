@@ -1,7 +1,8 @@
 #include "mainwindow.h"
-#include <QDebug>
 #include "firetower.h"
 #include "woodtower.h"
+#include <QDebug>
+#include <cmath>
 //插入怪物  路径点数组名、怪物初始坐标、怪物编号
 
 MainWindow::MainWindow(int level)
@@ -27,9 +28,9 @@ MainWindow::MainWindow(int level)
 
 
     //插入敌人的定时器
-    QTimer* timer = new QTimer(this);
-    timer->start(2000);//设置每2秒更新一次
-    connect(timer,&QTimer::timeout,[=]()
+    QTimer* subtimer = new QTimer(this);
+    subtimer->start(2000);//设置每2秒更新一次
+    connect(subtimer,&QTimer::timeout,[=]()
         {
 
             switch (Level)
@@ -62,13 +63,15 @@ MainWindow::MainWindow(int level)
             }
             }
         });
-    QTimer* timer2 = new QTimer(this);
-    timer2->start(120);
-    connect(timer2,&QTimer::timeout,[=]()
+    QTimer* maintimer = new QTimer(this);
+    maintimer->start(120);
+    connect(maintimer,&QTimer::timeout,[=]()
     {
+        //到家后删除敌人 生命值减1 刷新标签 生命值为0时关闭窗口
         for (auto Moni = EnemyVec.begin(); Moni != EnemyVec.end(); Moni++)
+        {
             if((*Moni)->Move()) //到达家的时候该函数return true
-            {//到家后删除敌人 生命值减1 刷新标签 生命值为0时关闭窗口
+            {
                 delete *Moni;
                 EnemyVec.erase(Moni);
                 life--;
@@ -76,6 +79,41 @@ MainWindow::MainWindow(int level)
                 if (life <= 0) this->close();
                 break;
             };
+        }
+
+        //塔获得目标
+        for (auto tower : TowerBaseVec)
+        {
+            if(!tower->hasaim)
+            {//从最新插入的敌人开始判断是否在攻击范围之内 在就设为目标
+                for(int i = EnemyVec.size()-1;i >= 0;i--)
+                {
+                    if(sqrt((tower->GetcpX()-EnemyVec.at(i)->GetX()-32)*(tower->GetcpX()-EnemyVec.at(i)->GetX()-32)+(tower->GetcpY()-EnemyVec.at(i)->GetY()-32)*(tower->GetcpY()-EnemyVec.at(i)->GetY()-32)) <= tower->GetAttackRange())
+                    {
+                        tower->SetTarget(EnemyVec.at(i));
+                        tower->hasaim = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {//有目标就设置旋转角度 达到炮塔随目标旋转的效果
+                if(sqrt((tower->GetcpX()-tower->GetTarget()->GetX()-32)*(tower->GetcpX()-tower->GetTarget()->GetX()-32)+(tower->GetcpY()-tower->GetTarget()->GetY()-32)*(tower->GetcpY()-tower->GetTarget()->GetY()-32)) <= tower->GetAttackRange())
+                {//用反三角函数求旋转角
+                    tower->SetRotation(atan2(tower->GetTarget()->GetY()-tower->GetcpY(),tower->GetTarget()->GetX()-tower->GetcpX())*180/3.1415);
+                }
+            }
+
+            if(tower->hasaim)
+            {//当现有目标超出攻击范围 就删除它
+                if(sqrt((tower->GetcpX()-tower->GetTarget()->GetX()-32)*(tower->GetcpX()-tower->GetTarget()->GetX()-32)+(tower->GetcpY()-tower->GetTarget()->GetY()-32)*(tower->GetcpY()-tower->GetTarget()->GetY()-32)) > tower->GetAttackRange())
+                {
+                    tower->SetTarget(NULL);
+                    tower->hasaim = false;
+                }
+            }
+        }
+
         update();
     });
 }
@@ -109,7 +147,11 @@ void MainWindow::DrawTower(QPainter & painter)
     {
         if(tower->show == true)
         {
+            painter.translate(tower->GetcpX(),tower->GetcpY());
+            painter.rotate(tower->GetRotation());
+            painter.translate(-tower->GetcpX(),-tower->GetcpY());
             painter.drawPixmap(tower->GetX(),tower->GetY(),72,46,QPixmap(tower->GetImage()));
+            painter.resetTransform();
         }
     }
 }

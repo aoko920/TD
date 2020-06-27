@@ -2,7 +2,7 @@
 #define FIRETOWER_H
 
 #include "towerbase.h"
-//花钱多 威力大
+//花钱多 威力大 攻击范围小
 class FireTower:public TowerBase
 {
 public:
