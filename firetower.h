@@ -6,7 +6,7 @@
 class FireTower:public TowerBase
 {
 public:
-    FireTower(int x,int y);
+    FireTower(int x,int y,int _cpx,int _cpy);
 };
 
 #endif // FIRETOWER_H

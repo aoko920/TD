@@ -6,7 +6,7 @@
 class WoodTower:public TowerBase
 {
 public:
-    WoodTower(int x,int y);
+    WoodTower(int x,int y,int _cpx,int _cpy);
 };
 
 #endif // WOODTOWER_H

@@ -237,7 +237,7 @@ void MainWindow::mousePressEvent(QMouseEvent *click)
                     if(EnoughMoney(160))
                     {
                         buttons[i]->show = false;
-                        TowerBaseVec.push_back(new FireTower(buttons[i]->x+76,buttons[i]->y+48));
+                        TowerBaseVec.push_back(new FireTower(buttons[i]->x+76,buttons[i]->y+48,buttons[i]->GetX()+96,buttons[i]->GetY()+68));
                     }
                 }
                 else
@@ -245,7 +245,7 @@ void MainWindow::mousePressEvent(QMouseEvent *click)
                     if(EnoughMoney(100))
                     {
                         buttons[i]->show = false;
-                        TowerBaseVec.push_back(new WoodTower(buttons[i]->x+76,buttons[i]->y-32));
+                        TowerBaseVec.push_back(new WoodTower(buttons[i]->x+76,buttons[i]->y-32,buttons[i]->GetX()+96,buttons[i]->GetY()-12));
                     }
                 }
                 update();
