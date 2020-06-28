@@ -6,7 +6,7 @@
 class Bullet
 {
 public:
-    Bullet(int _x,int _y/*,int _ld,int _k,int _b*/);
+    Bullet(int _x,int _y);
     int GetX();
     int GetY();
     void SetX(int);

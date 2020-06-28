@@ -1,12 +1,9 @@
 #include "bullet.h"
 
-Bullet::Bullet(int _x,int _y/*,int _ld,int _k,int _b*/)
+Bullet::Bullet(int _x,int _y)
 {
     x = _x;
     y = _y;
-    /*ld = _ld;
-    k=_k;
-    b=_b;*/
 }
 
 int Bullet::GetX()

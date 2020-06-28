@@ -26,44 +26,7 @@ MainWindow::MainWindow(int level)
     Life->setFont(QFont("Times",12,QFont::Black));
     Life->setText(QString("Life：%1").arg(life));
 
-
-    //插入敌人的定时器
-    QTimer* subtimer = new QTimer(this);
-    subtimer->start(2000);//设置每2秒更新一次
-    connect(subtimer,&QTimer::timeout,[=]()
-        {
-
-            switch (Level)
-            {
-            case 1:
-            {
-                //路径拐点数组
-                QPoint* Waypoints1[6] = {new QPoint(240 , 200), new QPoint(240 , 320), new QPoint(520 , 320), new QPoint(520 , 160), new QPoint(720 , 160), new QPoint(homepoint->x(),homepoint->y())};
-                //起始点数组
-                QPoint* startpoints = new QPoint(-40, 200);
-                //拐点个数数组
-                int sum = 6;
-                //路径数组 拐点总数 开始点 类型
-                InsertEnemy( Waypoints1,sum,startpoints, 1);
-                update();
-                break;
-            }
-            case 2:
-            {
-                //路径拐点数组
-                QPoint* Waypoints1[] = {new QPoint(120 , 280), new QPoint(760 , 280), new QPoint(760 , 480), new QPoint(200 , 480), new QPoint(homepoint->x(),homepoint->y())};
-                //起始点数组
-                QPoint* startpoints = new QPoint(120 , -40);
-                //拐点个数数组
-                int sum = 5;
-                //路线1，路线2，开始点数组，拐点数
-                InsertEnemy( Waypoints1,sum,startpoints, 2);
-                update();
-                break;
-            }
-            }
-        });
-    QTimer* maintimer = new QTimer(this);
+    //主定时器
     maintimer->start(120);
     connect(maintimer,&QTimer::timeout,[=]()
     {
@@ -76,7 +39,10 @@ MainWindow::MainWindow(int level)
                 EnemyVec.erase(enemy);
                 life--;
                 Life->setText(QString("Life：%1").arg(life));
-                if (life <= 0) this->close();
+                if (life <= 0)
+                {
+                    this->close();
+                }
                 break;
             };
         }
@@ -158,6 +124,52 @@ MainWindow::MainWindow(int level)
         update();
     });
 
+
+    //副定时器 用于插入敌人
+    subtimer->start(2000);
+    connect(subtimer,&QTimer::timeout,[=]()
+        {
+
+            switch (Level)
+            {
+            case 1:
+            {
+                //路径拐点数组
+                QPoint* Waypoints1[6] = {new QPoint(240 , 200), new QPoint(240 , 320), new QPoint(520 , 320), new QPoint(520 , 160), new QPoint(720 , 160), new QPoint(homepoint->x(),homepoint->y())};
+                //起始点数组
+                QPoint* startpoints = new QPoint(-40, 200);
+                //拐点个数数组
+                int sum = 6;
+                //路径数组 拐点总数 开始点 类型
+                InsertEnemy( Waypoints1,sum,startpoints, 1);
+                winnum++;
+                if(winnum>=30)//游戏结束设置
+                {
+                    this->close();
+                }
+                update();
+                break;
+            }
+            case 2:
+            {
+                //路径拐点数组
+                QPoint* Waypoints1[] = {new QPoint(120 , 280), new QPoint(760 , 280), new QPoint(760 , 480), new QPoint(200 , 480), new QPoint(homepoint->x(),homepoint->y())};
+                //起始点数组
+                QPoint* startpoints = new QPoint(120 , -40);
+                //拐点个数数组
+                int sum = 5;
+                //路线1，路线2，开始点数组，拐点数
+                InsertEnemy( Waypoints1,sum,startpoints, 2);
+                winnum++;
+                if(winnum>=50)//游戏结束设置
+                {
+                    this->close();
+                }
+                update();
+                break;
+            }
+            }
+        });
    }
 
 
@@ -384,4 +396,23 @@ bool MainWindow::EnoughMoney(int cost)
 
 MainWindow::~MainWindow()
 {
+    delete homepoint;
+    delete buttons[0];
+    delete buttons[1];
+    for(auto tp=TowerPositionVec.begin();tp!=TowerPositionVec.end();tp++)
+    {
+        delete *tp;
+        *tp=NULL;
+    }
+    for(auto t=TowerBaseVec.begin();t!=TowerBaseVec.end();t++)
+    {
+        delete *t;
+        *t=NULL;
+    }
+    for(auto e=EnemyVec.begin();e!=EnemyVec.end();e++)
+    {
+        delete *e;
+        *e=NULL;
+    }
+
 }
