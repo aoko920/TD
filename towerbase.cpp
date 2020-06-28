@@ -1,21 +1,21 @@
 #include "towerbase.h"
 
-int TowerBase::GetX()
+int TowerBase::GetX() const
 {
     return TowerX;
 }
 
-int TowerBase::GetY()
+int TowerBase::GetY() const
 {
     return TowerY;
 }
 
-int TowerBase::GetcpX()
+int TowerBase::GetcpX() const
 {
     return cpx;
 }
 
-int TowerBase::GetcpY()
+int TowerBase::GetcpY() const
 {
     return cpy;
 }
@@ -52,42 +52,66 @@ void TowerBase::SetRotation(int _rotation)
 
 void TowerBase::InterBullet()
 {
-
-    if(hasaim)
+    startpos++;
+    if(startpos<=5||!hasaim)
     {
-        if(target->GetX() < cpx)//向左发射子弹
-        {
-            BulletVec.push_back(new Bullet(cpx,cpy,-1));
-        }
-        else//向右发射子弹
-        {
-            BulletVec.push_back(new Bullet(cpx,cpy,1));
-        }
+        return;
     }
+    Bullet* bull = new Bullet(cpx,cpy);
+    if(cpx == target->GetX())
+    {
+        delete bull;
+        startpos = 0;
+        return ;
+    }
+
+
+            if(target->GetX() < cpx)//向左发射子弹
+            {
+                bull->SetLD(-1);
+                bull->k=(target->GetY()-cpy)/(target->GetX()-cpx);
+                bull->b=target->GetY()-bull->k*target->GetX();
+                BulletVec.push_back(bull);
+            }
+            else//向右发射子弹
+            {
+                bull->SetLD(1);
+                bull->k=(target->GetY()-cpy)/(target->GetX()-cpx);
+                bull->b=target->GetY()-bull->k*target->GetX();
+                BulletVec.push_back(bull);
+            }
+            startpos=0;
 }
 
 void TowerBase::BulletMove()
 {
-    for(auto bullet : BulletVec)
+    if(hasaim)
     {
-        if(bullet->GetLD() == -1 && cpx!=target->GetX())
+        for(auto bullet : BulletVec)
         {
-            bullet->SetX(bullet->GetX()-22);
-            bullet->SetY((target->GetY()-cpy)/(target->GetX()-cpx)*bullet->GetX()+target->GetY()-(target->GetY()-cpy)/(target->GetX()-cpx)*target->GetX());
+            if(bullet->GetLD() == -1 )
+            {
+                bullet->SetX(bullet->GetX()-24);
+                bullet->SetY(bullet->k*bullet->GetX()+bullet->b);
+            }
+            if(bullet->GetLD() == 1 )
+            {
+                bullet->SetX(bullet->GetX()+24);
+                bullet->SetY(bullet->k*bullet->GetX()+bullet->b);
+            }
         }
-        if(bullet->GetLD() == 1 && cpx!=target->GetX())
-        {
-            bullet->SetX(bullet->GetX()+22);
-            bullet->SetY((target->GetY()-cpy)/(target->GetX()-cpx)*bullet->GetX()+target->GetY()-(target->GetY()-cpy)/(target->GetX()-cpx)*target->GetX());
+        for(auto bullet = BulletVec.begin(); bullet != BulletVec.end(); bullet++)
+        {//如果子弹超过了攻击范围 就删除它
+            if((*bullet)->GetX() > cpx+attackrange || (*bullet)->GetX() < cpx-attackrange || (*bullet)->GetY() > cpy+attackrange || (*bullet)->GetY() < cpy-attackrange)
+            {
+                BulletVec.erase(bullet);
+                break;
+            }
         }
     }
-    for(auto bullet = BulletVec.begin(); bullet != BulletVec.end(); bullet++)
-    {//如果子弹超过了攻击范围 就删除它
-        if((*bullet)->GetX() > cpx+attackrange || (*bullet)->GetX() < cpx-attackrange || (*bullet)->GetY() > cpy+attackrange || (*bullet)->GetY() < cpy-attackrange)
-        {
-            BulletVec.erase(bullet);
-            break;
-        }
+    else
+    {
+        return ;
     }
 }
 
@@ -101,3 +125,7 @@ int TowerBase::GetAttackPower()
     return attackpower;
 }
 
+int TowerBase::GetCost()
+{
+    return cost;
+}

@@ -9,4 +9,5 @@ FireTower::FireTower(int x,int y,int _cpx,int _cpy)
     Image = QString(":/image/FireBottle.png");
     attackrange = 150;
     attackpower = 6;
+    cost = 160;
 }

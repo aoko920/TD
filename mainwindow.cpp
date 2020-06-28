@@ -68,12 +68,12 @@ MainWindow::MainWindow(int level)
     connect(maintimer,&QTimer::timeout,[=]()
     {
         //到家后删除敌人 生命值减1 刷新标签 生命值为0时关闭窗口
-        for (auto Moni = EnemyVec.begin(); Moni != EnemyVec.end(); Moni++)
+        for (auto enemy = EnemyVec.begin();  enemy!= EnemyVec.end();enemy++)
         {
-            if((*Moni)->Move()) //到达家的时候该函数return true
+            if((*enemy)->Move()) //到达家的时候该函数return true
             {
-                delete *Moni;
-                EnemyVec.erase(Moni);
+                delete *enemy;
+                EnemyVec.erase(enemy);
                 life--;
                 Life->setText(QString("Life：%1").arg(life));
                 if (life <= 0) this->close();
@@ -128,23 +128,28 @@ MainWindow::MainWindow(int level)
             {
                 for(auto enemy = EnemyVec.begin();enemy != EnemyVec.end();enemy ++)
                 {//子弹落在敌人图片范围内
-                    if((*bullet)->GetX()+20 >= (*enemy)->GetX() && (*bullet)->GetX()+20 <= (*enemy)->GetX()+64 && (*bullet)->GetY()+20 >= (*enemy)->GetY() && (*bullet)->GetY()+20 <= (*enemy)->GetY()+64)
+                    if((*bullet)->GetX() >= (*enemy)->GetX() && (*bullet)->GetX() <= (*enemy)->GetX()+64 && (*bullet)->GetY() >= (*enemy)->GetY() && (*bullet)->GetY() <= (*enemy)->GetY()+64)
                     {
-                        bulletvec.erase(bullet);
+                        (*bullet)->show = false;
                         (*enemy)->SetLife((*enemy)->GetLife()-tower->GetAttackPower());
-                        if((*enemy)->GetLife() <= 0)
+                    }
+                    if((*enemy)->GetLife() <= 0)
+                    {
+                        for(auto _tower : TowerBaseVec)
                         {
-                            for(auto _tower : TowerBaseVec)
+                            if(_tower->GetTarget() == *enemy)
                             {
-                                if(_tower->GetTarget() == *enemy)
+                                _tower->SetTarget(NULL);
+                                _tower->hasaim = false;
+                                for(auto bullet : _tower->BulletVec)
                                 {
-                                    _tower->SetTarget(NULL);
+                                    bullet->show = false;
                                 }
                             }
-                            money = money + (*enemy)->GetWorth();
-                            Money->setText(QString("Money：%1").arg(money));
-                            EnemyVec.erase(enemy);
                         }
+                        money = money + (*enemy)->GetWorth();
+                        Money->setText(QString("Money：%1").arg(money));
+                        EnemyVec.erase(enemy);
                     }
                 }
             }
@@ -188,7 +193,10 @@ void MainWindow::DrawTower(QPainter & painter)
         {
             for (auto bullet : tower->GetBulletVec())
             {
-                painter.drawPixmap(bullet->GetX(),bullet->GetY(), 40, 40,QPixmap(bullet->GetImage()));
+                if(bullet->show)
+                {
+                    painter.drawPixmap(bullet->GetX(),bullet->GetY(), 40, 40,QPixmap(bullet->GetImage()));
+                }
             }
             painter.translate(tower->GetcpX(),tower->GetcpY());
             painter.rotate(tower->GetRotation());
@@ -347,6 +355,8 @@ void MainWindow::mousePressEvent(QMouseEvent *click)
             {
                // t->show = false;
                 TowerBaseVec.erase(&t);
+                money = money + t->GetCost()*0.25;//拆塔可回收部分钱
+                Money->setText(QString("Money：%1").arg(money));
             }
         }
     }

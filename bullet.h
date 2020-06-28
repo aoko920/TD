@@ -6,13 +6,16 @@
 class Bullet
 {
 public:
-    Bullet(int _x,int _y,int _ld);
+    Bullet(int _x,int _y/*,int _ld,int _k,int _b*/);
     int GetX();
     int GetY();
     void SetX(int);
     void SetY(int);
+    void SetLD(int);
     int GetLD();
     QString GetImage();
+    int k=0,b=0;
+    bool show = true;
 private:
     int x;
     int y;

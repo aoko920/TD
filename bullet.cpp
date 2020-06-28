@@ -1,10 +1,12 @@
 #include "bullet.h"
 
-Bullet::Bullet(int _x,int _y,int _ld)
+Bullet::Bullet(int _x,int _y/*,int _ld,int _k,int _b*/)
 {
     x = _x;
     y = _y;
-    ld = _ld;
+    /*ld = _ld;
+    k=_k;
+    b=_b;*/
 }
 
 int Bullet::GetX()
@@ -32,6 +34,10 @@ QString Bullet::GetImage()
     return Image;
 }
 
+void Bullet::SetLD(int _ld)
+{
+    ld=_ld;
+}
 int Bullet::GetLD()
 {
     return ld;
